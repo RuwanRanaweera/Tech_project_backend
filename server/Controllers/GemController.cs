@@ -88,6 +88,7 @@ namespace server.Controllers
                     para.Add("@price", data.price);
                     para.Add("@gemBid", data.gemBid);
                   para.Add("@gemImage", data.gemImage);
+                    para.Add("@userId", data.userId);
 
                     var result = await connection.QueryAsync("[dbo].[InsertGem]", para, commandType: CommandType.StoredProcedure);
 
@@ -119,6 +120,7 @@ namespace server.Controllers
                     para.Add("@gemImage", data.gemImage);
                     para.Add("@price", data.price);
                     para.Add("@gemBid", data.gemBid);
+                    para.Add("@userId", data.userId);
 
 
                     var result = await connection.QueryAsync("Sp name", para, commandType: CommandType.StoredProcedure);
@@ -174,6 +176,7 @@ namespace server.Controllers
         public int price  { get; set; }
         public bool gemBid { get; set; }
         public string gemImage { get; set; }
+        public int userId { get; set; }
 
     }
 

@@ -115,6 +115,7 @@ namespace server.Controllers
                     para.Add("@password", passHash);
                     para.Add("@address", data.address);
                     para.Add("@nic", data.nic);
+                        
 
                     var result = await connection.QueryAsync("[dbo].[InsertGUser]", para, commandType: CommandType.StoredProcedure);
 
