@@ -115,7 +115,10 @@ namespace server.Controllers
                     para.Add("@password", passHash);
                     para.Add("@address", data.address);
                     para.Add("@nic", data.nic);
-                        
+                    para.Add("@userType", data.userType);
+                    para.Add("@approve", data.approve);
+                    para.Add("@phoneNumber", data.phoneNumber);
+
 
                     var result = await connection.QueryAsync("[dbo].[InsertGUser]", para, commandType: CommandType.StoredProcedure);
 
@@ -141,15 +144,11 @@ namespace server.Controllers
                 using (var connection = new SqlConnection(_connectionString))
                 {
                     DynamicParameters para = new DynamicParameters();
-                    para.Add("@id", id);
                     para.Add("@firstName", data.firstName);
-                    para.Add("@lastName", data.lastName);
-                    para.Add("@email", data.email);
-                    para.Add("@password", data.password);
-                    para.Add("@address", data.address);
+                
 
 
-                    var result = await connection.QueryAsync("Sp name", para, commandType: CommandType.StoredProcedure);
+                    var result = await connection.QueryAsync("UpdateUser", para, commandType: CommandType.StoredProcedure);
 
                     return Ok(new BaseResponse() { success = true, message = "Success", errorType = "NA", data = result });
                 }
@@ -213,6 +212,9 @@ namespace server.Controllers
         public string password { get; set; }
         public string address { get; set; }
         public string nic { get; set; }
+        public bool userType { get; set; }
+        public bool approve { get; set; }
+        public string phoneNumber { get; set; }
     }
 
 

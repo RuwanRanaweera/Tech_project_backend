@@ -89,6 +89,8 @@ namespace server.Controllers
                     para.Add("@gemBid", data.gemBid);
                   para.Add("@gemImage", data.gemImage);
                     para.Add("@userId", data.userId);
+                    para.Add("@approve", data.approve);
+
 
                     var result = await connection.QueryAsync("[dbo].[InsertGem]", para, commandType: CommandType.StoredProcedure);
 
@@ -177,6 +179,7 @@ namespace server.Controllers
         public bool gemBid { get; set; }
         public string gemImage { get; set; }
         public int userId { get; set; }
+        public bool approve { get; set; }
 
     }
 
