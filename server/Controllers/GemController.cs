@@ -108,24 +108,21 @@ namespace server.Controllers
         }
 
 
+
+
         [HttpPut("Update/{id}")]
-        public async Task<ActionResult> Update(int id, Gem data)
+        public async Task<ActionResult> Update(Gem data, int id)
         {
             try
             {
                 using (var connection = new SqlConnection(_connectionString))
                 {
                     DynamicParameters para = new DynamicParameters();
-                    para.Add("@id", id);
-                    para.Add("@gemName", data.gemName);
-                    para.Add("@gemDescription", data.gemDescription);
-                    para.Add("@gemImage", data.gemImage);
-                    para.Add("@price", data.price);
-                    para.Add("@gemBid", data.gemBid);
-                    para.Add("@userId", data.userId);
+                    para.Add("@gemID", id);
 
 
-                    var result = await connection.QueryAsync("Sp name", para, commandType: CommandType.StoredProcedure);
+
+                    var result = await connection.QueryAsync<Gem>("UpdateGem", para, commandType: CommandType.StoredProcedure);
 
                     return Ok(new BaseResponse() { success = true, message = "Success", errorType = "NA", data = result });
                 }
@@ -136,7 +133,7 @@ namespace server.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new BaseResponse() { success = false, message = "Update will be canceled!", errorType = "EX" });
+                return StatusCode(StatusCodes.Status500InternalServerError, new BaseResponse() { success = false, message = "Action will be canceled!", errorType = "EX" });
             }
         }
 

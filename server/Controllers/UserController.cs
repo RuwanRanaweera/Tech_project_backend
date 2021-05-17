@@ -137,18 +137,18 @@ namespace server.Controllers
 
 
         [HttpPut("Update/{id}")]
-        public async Task<ActionResult> Update(int id, User data)
+        public async Task<ActionResult> Update(User data,int id)
         {
             try
             {
                 using (var connection = new SqlConnection(_connectionString))
                 {
                     DynamicParameters para = new DynamicParameters();
-                    para.Add("@firstName", data.firstName);
+                    para.Add("@id", id);
                 
 
 
-                    var result = await connection.QueryAsync("UpdateUser", para, commandType: CommandType.StoredProcedure);
+                    var result = await connection.QueryAsync<User>("UpdateUser", para, commandType: CommandType.StoredProcedure);
 
                     return Ok(new BaseResponse() { success = true, message = "Success", errorType = "NA", data = result });
                 }

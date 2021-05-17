@@ -48,6 +48,34 @@ namespace server.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new BaseResponse() { success = false, message = "Action will be canceled!", errorType = "EX" });
             }
         }
+
+        [HttpPost("login")]
+        public async Task<ActionResult> login(Admin data)
+        {
+            try
+            {
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    DynamicParameters para = new DynamicParameters();
+                    String passHash = test.CreateMD5(data.password);
+                    para.Add("@email", data.email);
+                    para.Add("@password", passHash);
+
+                    var result = await connection.QueryAsync("[dbo].[AdminLogin]", para, commandType: CommandType.StoredProcedure);
+
+                    return Ok(new BaseResponse() { success = true, message = "Success", errorType = "NA", data = result });
+                }
+            }
+            catch (SqlException ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new BaseResponse() { success = false, message = ex.Message, errorType = "VAL", data = ex, exceptionNumber = ex.Number });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new BaseResponse() { success = false, message = "Action will be canceled!", errorType = "EX" });
+            }
+        }
+
     }
 
 
