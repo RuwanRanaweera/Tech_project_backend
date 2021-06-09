@@ -87,9 +87,10 @@ namespace server.Controllers
                     para.Add("@gemDescription", data.gemDescription);
                     para.Add("@price", data.price);
                     para.Add("@gemBid", data.gemBid);
-                  para.Add("@gemImage", data.gemImage);
+                    para.Add("@gemImage", data.gemImage);
                     para.Add("@userId", data.userId);
                     para.Add("@approve", data.approve);
+                    para.Add("@certificate", data.certificate);
 
 
                     var result = await connection.QueryAsync("[dbo].[InsertGem]", para, commandType: CommandType.StoredProcedure);
@@ -123,6 +124,37 @@ namespace server.Controllers
 
 
                     var result = await connection.QueryAsync<Gem>("UpdateGem", para, commandType: CommandType.StoredProcedure);
+
+                    return Ok(new BaseResponse() { success = true, message = "Success", errorType = "NA", data = result });
+                }
+            }
+            catch (SqlException ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new BaseResponse() { success = false, message = ex.Message, errorType = "VAL", data = ex, exceptionNumber = ex.Number });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new BaseResponse() { success = false, message = "Action will be canceled!", errorType = "EX" });
+            }
+        }
+
+
+        [HttpPut("Updates/{id}")]
+        public async Task<ActionResult> Updates( int id,Gem data)
+        {
+            try
+            {
+                using (var connection = new SqlConnection(_connectionString))
+                {
+                    DynamicParameters para = new DynamicParameters();
+                    para.Add("@gemID", id);
+                    para.Add("@price", data.price);
+                    para.Add("@bidingTime", data.bidingTime);
+
+
+
+
+                    var result = await connection.QueryAsync<Gem>("UpdateGem2", para, commandType: CommandType.StoredProcedure);
 
                     return Ok(new BaseResponse() { success = true, message = "Success", errorType = "NA", data = result });
                 }
@@ -177,7 +209,8 @@ namespace server.Controllers
         public string gemImage { get; set; }
         public int userId { get; set; }
         public bool approve { get; set; }
-
+        public string certificate { get; set; }
+        public DateTime bidingTime { get; set; }
     }
 
 }
